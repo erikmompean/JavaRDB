@@ -74,7 +74,7 @@ public class App {
     }
     
     static private void editOrder() {
-        
+        new EditOrderController(scanner, mainUser);
     }
     
     private static void startConnection(){

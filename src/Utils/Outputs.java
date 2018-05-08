@@ -102,6 +102,14 @@ public class Outputs {
     public static void notEnoughStock() {
         System.out.println("No hay suficientes flores. Porfavor revise el stock en otro momento");
     }
+
+    public static void passwordsNotEqual() {
+        System.out.println("Las contraseñas no coinciden");
+    }
+
+    public static void emailExist() {
+        System.out.println("El email ya esta registrado en nuestra base de datos");
+    }
     
     
 }

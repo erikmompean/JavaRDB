@@ -7,13 +7,14 @@ package Database;
 
 import Models.Order;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author Erik
  */
 public interface OrderDAO {
-    ArrayList<Order> getAllOders(int userId);
+    HashMap<Integer, Order> getAllOders(int userId);
     boolean createOrder(int numberOfItems, String address, int flowerId, int userId);
     boolean editOrder(int id);
     boolean deleteOrder(int id);

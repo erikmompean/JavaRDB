@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cinerik;
+package ErikFlower;
 
 import Database.ConnectionSingleton;
 import Utils.Outputs;
@@ -11,7 +11,7 @@ import Database.UserDAO;
 import Database.UserManager;
 import Models.User;
 import Utils.AppUtils;
-import static cinerik.Controller.scanner;
+import static ErikFlower.Controller.scanner;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -20,7 +20,7 @@ import java.util.Scanner;
  *
  * @author Erik
  */
-public class Cinerik {
+public class ErikFlower {
 
     /**
      * @param args the command line arguments
@@ -69,15 +69,22 @@ public class Cinerik {
     private static void register(){
         Outputs.registerEmail();
         String email = sc.nextLine();
+        
+        if(uDAO.checkIfExists(email)){
+            Outputs.emailExist();
+            firstMenu();
+        }
+        
         Outputs.registerPassword();
         String password = sc.nextLine();
         Outputs.registerRePassword();
         String rePassword = sc.nextLine();
         
+
         if(password.equals(rePassword)){
             crateAccount(email, password);
         }else {
-            Outputs.sqlExceptionMessage();
+            Outputs.passwordsNotEqual();
             firstMenu();
         }
         
@@ -85,7 +92,7 @@ public class Cinerik {
 
     private static void checkLogin(String email, String password) {
         try {
-            User loggedUser = uDAO.logIn(email, password);
+            User loggedUser = uDAO.login(email, password);
             handleLogin(loggedUser);
                 
         } catch (SQLException ex) {

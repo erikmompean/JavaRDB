@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,7 +46,7 @@ public class UserManager implements UserDAO{
     }
 
     @Override
-    public User logIn(String email, String password) throws SQLException{
+    public User login(String email, String password) throws SQLException{
         PreparedStatement pstmt = instance.prepareStatement("SELECT * FROM user WHERE email=? AND password=?");
         pstmt.setString(1, email);
         pstmt.setString(2, password);
@@ -53,7 +55,7 @@ public class UserManager implements UserDAO{
         
         while(rs.next()){
             String rEmail = rs.getString("email");
-            int rId = rs.getInt("id");
+            int rId = rs.getInt("user_id");
             User user = new User(rId, rEmail);
             users.add(user);
         }
@@ -64,4 +66,24 @@ public class UserManager implements UserDAO{
             return null;
     }
     
+    @Override
+    public boolean checkIfExists(String email) {
+        String rEmail = null;
+        
+        try {
+            PreparedStatement pstmt = instance.prepareStatement("SELECT `email` FROM user WHERE user.email=?");
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()){
+                rEmail = rs.getString("email");
+            }
+            
+        } catch (SQLException ex) {
+            Outputs.sqlExceptionMessage();
+            return false;
+        }
+        
+        return rEmail != null;
+    }
 }

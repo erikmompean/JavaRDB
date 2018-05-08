@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cinerik;
+package ErikFlower;
 
 import Database.ConnectionSingleton;
 import Database.FlowerDAO;
@@ -13,7 +13,7 @@ import Models.Flower;
 import Models.User;
 import Utils.AppUtils;
 import Utils.Outputs;
-import static cinerik.Controller.scanner;
+import static ErikFlower.Controller.scanner;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class App {
     private static void selectAppMenu(int option) {
         switch(option){
             case 1:
-                makeOrder();
+                createOrder();
                 break;
             case 2:
                 break;
@@ -70,8 +70,7 @@ public class App {
     }
     
     static private void createOrder() {
-
-        
+        new MakeOrderController(sc, mainUser);
     }
     
     static private void editOrder() {
@@ -88,8 +87,5 @@ public class App {
         }
     }
     
-    private static void makeOrder() {
-        new MakeOrderController(sc, mainUser);
-    }
     
 }

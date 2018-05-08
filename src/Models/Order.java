@@ -28,6 +28,14 @@ public class Order {
         this.address = address;
     }
     
+    public Order(int id, int numOfItems, Flower flowerType, String address) {
+        this.id = id;
+        this.numOfItems = numOfItems;
+        this.flowerType = flowerType;
+        this.receiver = receiver;
+        this.address = address;
+    }
+    
     public int getId() {
         return id;
     }
@@ -64,6 +72,12 @@ public class Order {
         this.address = address;
     }
     
-    
+    public String toMyString() {
+        return "Id: " + id + "\n" +
+                "Cantidad: " + numOfItems + "\n" +
+                "Flor: " + flowerType.getName() + "\n" +
+                "Direccion: " + address + "\n" +
+                "---------------------";
+    }
     
 }

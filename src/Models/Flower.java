@@ -26,6 +26,10 @@ public class Flower {
         }
     }
 
+    public Flower(String name){
+        this.name = name;
+    }
+    
     public int getId() {
         return id;
     }

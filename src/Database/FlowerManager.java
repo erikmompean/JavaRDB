@@ -32,11 +32,11 @@ public class FlowerManager implements FlowerDAO{
         HashMap<Integer, Flower> flowers = new HashMap<Integer, Flower>();
         
         try {
-            PreparedStatement pstmt = instance.prepareStatement("SELECT * FROM flower ORDER BY id ASC");
+            PreparedStatement pstmt = instance.prepareStatement("SELECT * FROM flower ORDER BY flower_id ASC");
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()){
-                int id = rs.getInt("id");
+                int id = rs.getInt("flower_id");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 int stock = rs.getInt("stock");
@@ -57,7 +57,7 @@ public class FlowerManager implements FlowerDAO{
     public boolean updateStock(int id, int stockToUpdate) {
         PreparedStatement pstmt;
         try {
-            pstmt = instance.prepareStatement("UPDATE `flower` SET `stock` = ? WHERE `flower`.`id` = ?");
+            pstmt = instance.prepareStatement("UPDATE `flower` SET `stock` = ? WHERE `flower`.`flower_id` = ?");
             pstmt.setInt(1, stockToUpdate);
             pstmt.setInt(2, id);
             int updatedRows = pstmt.executeUpdate();

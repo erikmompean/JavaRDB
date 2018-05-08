@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cinerik;
+package ErikFlower;
 
 import Database.ConnectionSingleton;
 import Database.FlowerDAO;
@@ -33,7 +33,7 @@ public class MakeOrderController extends Controller {
     private Order order;
     private int stock;
     FlowerDAO flowerDAO;
-    
+    private boolean allRight = true;
     public MakeOrderController(Scanner scanner, User mainUser) {
         super(scanner, mainUser);
     }
@@ -59,8 +59,10 @@ public class MakeOrderController extends Controller {
             flowerOption = AppUtils.selectInt(scanner, true);
             selectedFlower = getFlower(flowerOption, flowers);
             
-            if (flowerOption == -1) 
+            if (flowerOption == -1){
+                allRight = false;
                 return;
+            }
             else if (selectedFlower == null)
                 Outputs.selectValidOption();
             
@@ -72,6 +74,7 @@ public class MakeOrderController extends Controller {
         int selectQuantity = AppUtils.selectInt(scanner, true);
         
         if(selectQuantity == -1){
+            allRight = false;
             return;
         }else if(selectQuantity == 0){
             Outputs.zeroSelected();
@@ -80,6 +83,7 @@ public class MakeOrderController extends Controller {
         
         if(stock < 0){
             Outputs.notEnoughStock();
+            allRight = false;
             return;
         }
         
@@ -99,20 +103,21 @@ public class MakeOrderController extends Controller {
 
     @Override
     protected void postInit() {
-        
-        flowerDAO.updateStock(order.getFlowerType().getId(), stock);
-        
-        boolean isOrderCreated = executeQuery(
-                order.getNumOfItems(), 
-                order.getAddress(), 
-                order.getFlowerType().getId(), 
-                order.getReceiver().getId()
-        );
-        
-        if (isOrderCreated) {
-            Outputs.orderCreated();
-        } else{
-            Outputs.orderNotCreated();
+        if (allRight) {
+            flowerDAO.updateStock(order.getFlowerType().getId(), stock);
+
+            boolean isOrderCreated = executeQuery(
+                    order.getNumOfItems(), 
+                    order.getAddress(), 
+                    order.getFlowerType().getId(), 
+                    order.getReceiver().getId()
+            );
+
+            if (isOrderCreated) {
+                Outputs.orderCreated();
+            } else{
+                Outputs.orderNotCreated();
+            }
         }
     }
 

@@ -19,7 +19,9 @@ public class AppUtils {
         int limitNumber = isExit ? -1 : 0;
         
         do{
+            isNumber = true;
             try {
+                
                 number = Integer.parseInt(sc.nextLine());
                 
                 if(isExit){

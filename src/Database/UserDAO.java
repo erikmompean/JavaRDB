@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author Erik
  */
 public interface UserDAO {
-    public boolean register(String email, String password);
-    public User logIn(String email, String password) throws SQLException;
-    
+    boolean register(String email, String password);
+    User login(String email, String password) throws SQLException;
+    boolean checkIfExists(String email);
 }

@@ -5,12 +5,15 @@
  */
 package Database;
 
+import Models.Flower;
 import Models.Order;
 import Utils.Outputs;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -25,8 +28,35 @@ public class OrderManager implements OrderDAO{
     }    
     
     @Override
-    public ArrayList<Order> getAllOders(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public HashMap<Integer, Order> getAllOders(int userId) {
+        
+        HashMap<Integer, Order> orders = new HashMap<Integer, Order>();
+        
+        try {
+            PreparedStatement pstmt = instance.prepareStatement("SELECT `order`.*, flower.flower_id, flower.name "
+                    + "FROM `order` "
+                    + "LEFT JOIN flower "
+                    + "ON `order`.`flower_id` = flower.flower_id "
+                    + "ORDER BY `order`.`order_id`");
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("order_id");
+                int numOfItems = rs.getInt("number_of_items");
+                String address = rs.getString("address");
+                String flowerName = rs.getString("name");
+                
+                Flower flower = new Flower(flowerName);
+                Order order = new Order(id, numOfItems,flower, address);
+                orders.put(order.getId(), order);
+            }   
+        } catch (SQLException ex) {
+            Outputs.sqlExceptionMessage();
+            ConnectionSingleton.closeConnection();
+            System.exit(0);
+        }
+        
+        return orders;
     }
     
     @Override

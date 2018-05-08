@@ -6,10 +6,14 @@
 package ErikFlower;
 
 import Database.ConnectionSingleton;
+import Database.OrderDAO;
+import Database.OrderManager;
+import Models.Order;
 import Models.User;
 import Utils.Outputs;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -17,35 +21,25 @@ import java.util.Scanner;
  * @author Erik
  */
 public class SeeOrdersController extends Controller{
-    private Connection connection;
-    
+    HashMap<Integer, Order> orders;
     public SeeOrdersController(Scanner scanner, User mainUser) {
         super(scanner, mainUser);
     }
 
     @Override
     protected void preInit() {
-        startConnection();
+        OrderDAO orderDAO = new OrderManager(connection);
+        orders = orderDAO.getAllOders(mainUser.getId());
     }
 
     @Override
     protected void init() {
-        
+
     }
 
     @Override
     protected void postInit() {
         
-    }
-    
-    private void startConnection(){
-        try {
-            connection = ConnectionSingleton.getConnection();           
-        } catch (SQLException ex) {
-            Outputs.sqlExceptionMessage();
-            ConnectionSingleton.closeConnection();
-            System.exit(0);
-        }
     }
     
 }

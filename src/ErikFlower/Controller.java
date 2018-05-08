@@ -5,7 +5,11 @@
  */
 package ErikFlower;
 
+import Database.ConnectionSingleton;
 import Models.User;
+import Utils.Outputs;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -22,10 +26,12 @@ public abstract class Controller {
      */
     protected static Scanner scanner;
 
+    protected Connection connection;
     public Controller(Scanner scanner, User mainUser) {
         this.scanner = scanner;
         this.mainUser = mainUser;
         
+        startConnection();
         preInit();
         init();
         postInit();
@@ -37,6 +43,14 @@ public abstract class Controller {
 
     protected abstract void postInit();
     
-    
+    private void startConnection(){
+        try {
+            connection = ConnectionSingleton.getConnection();           
+        } catch (SQLException ex) {
+            Outputs.sqlExceptionMessage();
+            ConnectionSingleton.closeConnection();
+            System.exit(0);
+        }
+    }
     
 }

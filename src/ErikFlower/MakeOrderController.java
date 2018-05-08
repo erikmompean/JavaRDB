@@ -29,7 +29,6 @@ import java.util.Scanner;
  */
 public class MakeOrderController extends Controller {
 
-    private Connection connection;
     private Order order;
     private int stock;
     FlowerDAO flowerDAO;
@@ -40,7 +39,6 @@ public class MakeOrderController extends Controller {
 
     @Override
     protected void preInit() {
-        startConnection();
         order = new Order();
         order.setReceiver(mainUser);
     }
@@ -130,16 +128,6 @@ public class MakeOrderController extends Controller {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             System.out.println(pair.getValue().toString());
-        }
-    }
-    
-    private void startConnection(){
-        try {
-            connection = ConnectionSingleton.getConnection();           
-        } catch (SQLException ex) {
-            Outputs.sqlExceptionMessage();
-            ConnectionSingleton.closeConnection();
-            System.exit(0);
         }
     }
 

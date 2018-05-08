@@ -8,12 +8,15 @@ package ErikFlower;
 import Database.ConnectionSingleton;
 import Database.OrderDAO;
 import Database.OrderManager;
+import Models.Flower;
 import Models.Order;
 import Models.User;
 import Utils.Outputs;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -34,7 +37,7 @@ public class SeeOrdersController extends Controller{
 
     @Override
     protected void init() {
-
+        showAllOrders();
     }
 
     @Override
@@ -42,4 +45,12 @@ public class SeeOrdersController extends Controller{
         
     }
     
+    private void showAllOrders() {
+        Iterator it = orders.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Order order = (Order) pair.getValue();
+            System.out.println(order.toMyString());
+        }
+    }
 }

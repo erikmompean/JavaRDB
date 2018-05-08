@@ -54,6 +54,7 @@ public class App {
                 createOrder();
                 break;
             case 2:
+                seeMyOrders();
                 break;
             case 3:
                 break;
@@ -65,8 +66,7 @@ public class App {
 
     }
     static private void seeMyOrders() {
-
-        
+        new SeeOrdersController(scanner, mainUser);
     }
     
     static private void createOrder() {

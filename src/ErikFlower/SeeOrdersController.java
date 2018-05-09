@@ -12,6 +12,7 @@ import Models.Flower;
 import Models.Order;
 import Models.User;
 import Utils.Outputs;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -42,7 +43,8 @@ public class SeeOrdersController extends Controller{
 
     @Override
     protected void postInit() {
-        
+        Outputs.ignoreLine();
+        String ignoreLine = scanner.nextLine();
     }
     
     private void showAllOrders() {

@@ -110,6 +110,20 @@ public class Outputs {
     public static void emailExist() {
         System.out.println("El email ya esta registrado en nuestra base de datos");
     }
+
+    public static void ignoreLine() {
+        System.out.println("Pulse ENTER cuando haya acabado de visualizar para continuar");
+    }
+
+    public static void selectOrderToUpdate() {
+        System.out.println("Seleccione el id del pedido a editar:");
+    }
     
-    
+    public static void whatWantUpdate() {
+        System.out.println("1. Numero de flores");
+        System.out.println("2. Direccion");
+        System.out.println("3. Flor");
+        System.out.println("4. Volver al menu principal");
+        System.out.println("Que desea editar?(-1 para salir)");
+    }
 }

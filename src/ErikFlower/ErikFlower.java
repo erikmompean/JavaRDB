@@ -107,6 +107,7 @@ public class ErikFlower {
             dbConnection = ConnectionSingleton.getConnection();           
             uDAO = new UserManager(dbConnection);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             Outputs.sqlExceptionMessage();
             ConnectionSingleton.closeConnection();
             System.exit(0);

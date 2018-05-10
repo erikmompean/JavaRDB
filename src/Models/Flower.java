@@ -28,6 +28,11 @@ public class Flower {
         }
     }
 
+    public Flower(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+    
     public Flower(String name){
         this.name = name;
     }

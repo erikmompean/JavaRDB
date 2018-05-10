@@ -73,5 +73,27 @@ public class FlowerManager implements FlowerDAO{
         return false;
     }
 
+    @Override
+    public int getStock(int id) {
+        //
+        int stock = -1;
+        try {
+            PreparedStatement pstmt = instance.prepareStatement("SELECT stock From flower WHERE flower_id=?");
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            
+            stock = rs.getInt("stock");
+           
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Outputs.sqlExceptionMessage();
+            ConnectionSingleton.closeConnection();
+            System.exit(0);
+        }
+        
+        return stock;
+    }
+
     
 }

@@ -37,7 +37,9 @@ public class OrderManager implements OrderDAO{
                     + "FROM `order` "
                     + "LEFT JOIN flower "
                     + "ON `order`.`flower_id` = flower.flower_id "
+                    + "WHERE user_id=? "
                     + "ORDER BY `order`.`order_id`");
+            pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
 
             while(rs.next()){
@@ -45,8 +47,9 @@ public class OrderManager implements OrderDAO{
                 int numOfItems = rs.getInt("number_of_items");
                 String address = rs.getString("address");
                 String flowerName = rs.getString("name");
+                int flowerId = rs.getInt("flower_id");
                 
-                Flower flower = new Flower(flowerName);
+                Flower flower = new Flower(flowerId, flowerName);
                 Order order = new Order(id, numOfItems,flower, address);
                 orders.put(order.getId(), order);
             }   
@@ -81,15 +84,47 @@ public class OrderManager implements OrderDAO{
     }
     
     @Override
-    public boolean editOrder(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean deleteOrder(int id) {
+               
+        PreparedStatement pstmt;
+        try {
+            pstmt = instance.prepareStatement("DELETE FROM `order` WHERE order_id=?");
+            pstmt.setInt(1, id);
+            int updatedRows = pstmt.executeUpdate();
+            
+            return updatedRows == 1;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Outputs.sqlExceptionMessage();
+            ConnectionSingleton.closeConnection();
+            System.exit(0);
+        }
+        
+        return false;
     }
 
     @Override
-    public boolean deleteOrder(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean editOrder(int id, int numberOfItems, String address, int flowerId) {
+        
+        PreparedStatement pstmt;
+        try {
+            pstmt = instance.prepareStatement("UPDATE `order` SET `number_of_items`=?,`address`=?,`flower_id`=? WHERE order_id=?");
+            pstmt.setInt(1, numberOfItems);
+            pstmt.setString(2, address);
+            pstmt.setInt(3, flowerId);
+            pstmt.setInt(4, id);
+            int updatedRows = pstmt.executeUpdate();
+            
+            return updatedRows == 1;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            Outputs.sqlExceptionMessage();
+            ConnectionSingleton.closeConnection();
+            System.exit(0);
+        }
+        
+        return false;
     }
-
 
 
 

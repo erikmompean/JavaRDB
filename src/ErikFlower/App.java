@@ -60,6 +60,7 @@ public class App {
                 editOrder();
                 break;
             case 4:
+                deleteOrder();
                 break;
             case 5:
                 break;
@@ -76,6 +77,10 @@ public class App {
     
     static private void editOrder() {
         new EditOrderController(sc, mainUser);
+    }
+    
+    static private void deleteOrder(){
+        new DeleteOrderController(sc, mainUser);
     }
     
     private static void startConnection(){

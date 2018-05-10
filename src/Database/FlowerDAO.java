@@ -16,4 +16,5 @@ import java.util.HashMap;
 public interface FlowerDAO {
     HashMap<Integer, Flower> getAll();
     boolean updateStock(int id, int stockToUpdate);
+    int getStock(int id);
 }

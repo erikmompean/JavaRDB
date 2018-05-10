@@ -45,6 +45,7 @@ public class MakeOrderController extends Controller {
 
     @Override
     protected void init() {
+        allRight = true;
         flowerDAO = new FlowerManager(connection);
         HashMap<Integer, Flower> flowers = flowerDAO.getAll();
         Flower selectedFlower;

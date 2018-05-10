@@ -16,7 +16,7 @@ import java.util.HashMap;
 public interface OrderDAO {
     HashMap<Integer, Order> getAllOders(int userId);
     boolean createOrder(int numberOfItems, String address, int flowerId, int userId);
-    boolean editOrder(int id);
+    boolean editOrder(int id, int numberOfItems, String address, int flowerId);
     boolean deleteOrder(int id);
     
 }

@@ -124,6 +124,6 @@ public class Outputs {
         System.out.println("2. Direccion");
         System.out.println("3. Flor");
         System.out.println("4. Volver al menu principal");
-        System.out.println("Que desea editar?(-1 para salir)");
+        System.out.println("Que desea editar?");
     }
 }

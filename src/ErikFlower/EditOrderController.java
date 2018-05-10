@@ -28,6 +28,8 @@ public class EditOrderController extends Controller{
     private boolean allRight = true;
     private HashMap<Integer, Flower> flowers;
     private HashMap<Integer, Order> orders;
+    private OrderDAO orderDAO;
+    FlowerDAO flowerDAO;
     
     public EditOrderController(Scanner scanner, User mainUser) {
         super(scanner, mainUser);
@@ -35,14 +37,15 @@ public class EditOrderController extends Controller{
 
     @Override
     protected void preInit() {
-        OrderDAO orderDAO = new OrderManager(connection);
-        FlowerDAO flowerDAO = new FlowerManager(connection);
+        orderDAO = new OrderManager(connection);
+        flowerDAO = new FlowerManager(connection);
         
         orders = orderDAO.getAllOders(mainUser.getId());
     }
 
     @Override
     protected void init() {
+        allRight = true;
         Order selectedOrder;
         int orderToUpdate;
         
@@ -53,7 +56,6 @@ public class EditOrderController extends Controller{
             selectedOrder = getOrder(orderToUpdate);
             
             if (orderToUpdate == -1){
-                allRight = false;
                 return;
             }
             else if (selectedOrder == null)
@@ -63,20 +65,22 @@ public class EditOrderController extends Controller{
         
         int wantUpdate;
         
-        do {            
+        do {
+            selectedOrder = getOrder(orderToUpdate);
             
+            Outputs.whatWantUpdate();
+            wantUpdate = AppUtils.selectInt(scanner, false);
             switch(wantUpdate){
                 case 1:
-                    
+                    updateNumber(selectedOrder);
                     break;
                 case 2:
-                    
+                    updateAddress(selectedOrder);
                     break;
                 case 3:
-                    
+                    updateFlower(selectedOrder);
                     break;
                 case 4:
-                    allRight = false;
                     return;
                     
             }
@@ -87,9 +91,6 @@ public class EditOrderController extends Controller{
     
     @Override
     protected void postInit() {
-        if(allRight){
-            
-        }
     }
     
     private int selectWhatToUpdate(Order selectedOrder){
@@ -97,6 +98,107 @@ public class EditOrderController extends Controller{
         Outputs.whatWantUpdate();
         
         return AppUtils.selectInt(scanner, true);
+    }
+    
+    private Order getOrder(int orderSelected) {
+        return orders.get(orderSelected);
+    }
+
+    private void updateNumber(Order selectedOrder) {
+        int stock = flowerDAO.getStock(selectedOrder.getFlowerType().getId());
+        
+        System.out.println("Cuantos quieres?(-1 para salir)");
+        int quantity = AppUtils.selectInt(scanner, true);
+        
+        if(quantity == -1)
+            return;
+        
+        int newStock;
+        
+        if(quantity > selectedOrder.getNumOfItems()){
+          newStock = stock - quantity;
+          if (newStock < 0){
+              System.out.println("No hay stock suficiente. Nuestro stock es de: "+ stock);
+          } else {
+            flowerDAO.updateStock(selectedOrder.getFlowerType().getId(), newStock);
+            orderDAO.editOrder(selectedOrder.getId(), quantity, selectedOrder.getAddress(), selectedOrder.getFlowerType().getId());
+            System.out.println("Se ha cambiado el numero de flores de correctamente");
+            System.out.println("");
+          }
+        }else if (quantity < selectedOrder.getNumOfItems()) {
+            newStock = stock + selectedOrder.getNumOfItems() - quantity;
+            
+            flowerDAO.updateStock(selectedOrder.getFlowerType().getId(), newStock);
+            orderDAO.editOrder(selectedOrder.getId(), quantity, selectedOrder.getAddress(), selectedOrder.getFlowerType().getId());
+            System.out.println("Se ha cambiado el numero de flores de correctamente");
+            System.out.println("");
+        }
+    }
+
+    private void updateAddress(Order selectedOrder) {
+        System.out.println("Añade la nueva direccion: ");
+        String newAddress = scanner.nextLine();
+        
+        orderDAO.editOrder(
+                selectedOrder.getId(),
+                selectedOrder.getNumOfItems(),
+                newAddress,
+                selectedOrder.getFlowerType().getId()
+        );
+        
+        System.out.println("Direccion editada correctamente");
+        System.out.println("");
+    }
+
+    // TODO no va del todo bien
+    private void updateFlower(Order selectedOrder) {
+        Flower selectedFlower;
+        int flowerOption;
+        
+        showAllFlowers();
+        do {
+            Outputs.selectFlower();
+            flowerOption = AppUtils.selectInt(scanner, true);
+            selectedFlower = getFlower(flowerOption, flowers);
+            
+            if (flowerOption == -1){
+                allRight = false;
+                return;
+            }
+            else if (selectedFlower == null)
+                Outputs.selectValidOption();
+            
+        } while (selectedFlower == null);
+        
+        do {
+            Outputs.selectFlower();
+            flowerOption = AppUtils.selectInt(scanner, true);
+            selectedFlower = getFlower(flowerOption, flowers);
+            
+            if (flowerOption == -1){
+                allRight = false;
+                return;
+            }
+            else if (selectedFlower == null)
+                Outputs.selectValidOption();
+            
+        } while (selectedFlower == null);
+        
+        System.out.println("Al cambiar de flores has de volver a seleccionar el numero: ");
+
+        selectedOrder.setFlowerType(selectedFlower);
+        updateNumber(selectedOrder);
+        
+    }
+    
+    private void showAllFlowers() {
+        flowers = flowerDAO.getAll();
+        Iterator it = flowers.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            System.out.println(pair.getValue().toString());
+        }
+
     }
     
     private void showAllOrders() {
@@ -108,7 +210,7 @@ public class EditOrderController extends Controller{
         }
     }
     
-    private Order getOrder(int orderSelected) {
-        return orders.get(orderSelected);
+    private Flower getFlower(int flowerSelected, HashMap<Integer, Flower> flowers) {
+        return flowers.get(flowerSelected);
     }
 }

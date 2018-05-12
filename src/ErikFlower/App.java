@@ -63,6 +63,8 @@ public class App {
                 deleteOrder();
                 break;
             case 5:
+                ConnectionSingleton.closeConnection();
+                System.exit(0);
                 break;
         }
 

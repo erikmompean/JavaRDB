@@ -126,4 +126,35 @@ public class Outputs {
         System.out.println("4. Volver al menu principal");
         System.out.println("Que desea editar?");
     }
+    
+    public static void howMuch(){
+        System.out.println("Cuantos quieres?(-1 para salir)");
+    }
+    
+    public static void soldOut(int stock){
+        System.out.println("No hay stock suficiente. Nuestro stock es de: "+ stock);
+    }
+    
+    public static void numberSuccefullChanged(){
+        System.out.println("Se ha cambiado el numero de flores de correctamente");
+        System.out.println("");
+    }
+    
+    public static void addNewAdress(){
+        System.out.println("Añade la nueva direccion: ");
+    }
+    
+    public static void addressSuccefullChanged(){
+        System.out.println("Direccion editada correctamente");
+        System.out.println("");
+    }
+        
+    public static void youHaveTochangeNumberOnUpdate(int stock){
+        System.out.println("Al cambiar de flores has de volver a seleccionar el numero. (-1 para salir) ");
+        System.out.println("Cuantas flores quieres? stock: " + stock);
+
+    }
+
+                    
+                    
 }
